@@ -3,7 +3,7 @@ FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG TARGETARCH
 WORKDIR /src
 
-RUN apt-get update && apt install gcc --yes
+#RUN apt-get update && apt install gcc --yes
 
 COPY src .
 
@@ -14,11 +14,12 @@ ARG BUILDPLATFORM
 #RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM and $TARGETARCH" > /log
 
 RUN dotnet restore Service/Service.csproj --arch $TARGETARCH
+
 RUN dotnet publish Service/Service.csproj \
     --no-restore \
     --configuration Release \
     --output /app \
-    --self-contained true \
+    --self-contained false \
     /p:NoWarn=RS0041 \
     --arch $TARGETARCH \
     -p:SKIP_OPENAPI_GENERATION=true

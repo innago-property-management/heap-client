@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <PublishAot>true</PublishAot>
+<!--        <PublishAot>true</PublishAot>-->
         <AssemblyName>Innago.Shared.HeapService</AssemblyName>
         <RootNamespace>Innago.Shared.HeapService</RootNamespace>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

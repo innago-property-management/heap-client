@@ -41,4 +41,6 @@ app.ConfigureRoutes(app.Configuration);
 await app.RunAsync();
 
 [ExcludeFromCodeCoverage]
+[RequiresUnreferencedCode("MapGet")]
+[RequiresDynamicCode("MapGet")]
 internal static partial class Program;
