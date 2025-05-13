@@ -3,6 +3,8 @@ FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG TARGETARCH
 WORKDIR /src
 
+RUN apt-get update && apt install gcc --yes
+
 COPY src .
 
 WORKDIR /src
@@ -16,7 +18,7 @@ RUN dotnet publish Service/Service.csproj \
     --no-restore \
     --configuration Release \
     --output /app \
-    --self-contained false \
+    --self-contained true \
     /p:NoWarn=RS0041 \
     --arch $TARGETARCH \
     -p:SKIP_OPENAPI_GENERATION=true
