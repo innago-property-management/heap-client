@@ -10,8 +10,6 @@ using Serilog;
 
 namespace Innago.Shared.HeapService;
 
-using System.Diagnostics.CodeAnalysis;
-
 internal static class ProgramConfiguration
 {
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
@@ -58,8 +56,6 @@ internal static class ProgramConfiguration
         app.UseHttpMetrics();
     }
 
-    [RequiresUnreferencedCode("MapGet")]
-    [RequiresDynamicCode("MapGet")]
     public static void ConfigureRoutes(this IEndpointRouteBuilder builder, IConfiguration configuration)
     {
         builder.MapOpenApi("/openapi.json").CacheOutput();
