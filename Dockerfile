@@ -30,7 +30,7 @@ FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS ap
 LABEL vendor="Innago"
 LABEL com.innago.image="Innago.HeapService"
 
-RUN apk update && apk upgrade
+RUN apk update --no-cache && apk upgrade --no-cache && rm -rf /var/cache/apk/*
 
 RUN addgroup --gid 10001 notroot \
     && adduser --uid 10001 --ingroup notroot notroot --disabled-password --no-create-home
