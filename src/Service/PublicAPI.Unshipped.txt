@@ -1,0 +1,6 @@
+Innago.Shared.HeapService.Payload<T>
+Innago.Shared.HeapService.Payload<T>.Error.get -> string?
+Innago.Shared.HeapService.Payload<T>.Error.init -> void
+Innago.Shared.HeapService.Payload<T>.Payload(T? Result = default(T?), string? Error = null) -> void
+Innago.Shared.HeapService.Payload<T>.Result.get -> T?
+Innago.Shared.HeapService.Payload<T>.Result.init -> void
