@@ -11,8 +11,8 @@ ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 #RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM and $TARGETARCH" > /log
 
-RUN dotnet restore ./src/Service.csproj --arch $TARGETARCH
-RUN dotnet publish ./src/Service.csproj \
+RUN dotnet restore Service/Service.csproj --arch $TARGETARCH
+RUN dotnet publish Service/Service.csproj \
     --no-restore \
     --configuration Release \
     --output /app \
