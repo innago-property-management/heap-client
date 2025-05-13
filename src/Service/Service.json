@@ -1,0 +1,53 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Innago.Shared.HeapService | v1",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/placeholder": {
+      "get": {
+        "tags": [
+          "test"
+        ],
+        "description": "placeholder",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayloadOfstring"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PayloadOfstring": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "default": null,
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "default": null,
+            "nullable": true
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "test"
+    }
+  ]
+}
