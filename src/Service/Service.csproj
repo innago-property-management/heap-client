@@ -16,6 +16,8 @@
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <TrimmerSingleWarn>false</TrimmerSingleWarn>
         <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <UserSecretsId>aed57d7d-7507-4563-ae16-6b76899fd0dd</UserSecretsId>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -38,7 +40,7 @@
     </Choose>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="9.0.0" />        
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
         <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="9.0.5">
             <PrivateAssets>all</PrivateAssets>
@@ -50,6 +52,8 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
         <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
         <PackageReference Include="prometheus-net.AspNetCore.HealthChecks" Version="8.2.1" />
+        <PackageReference Include="RestSharp" Version="112.1.0" />
+        <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.15.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
         <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.3.0" />

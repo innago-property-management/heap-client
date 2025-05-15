@@ -1,6 +1,18 @@
+Innago.Shared.HeapService.Handlers.Track
+Innago.Shared.HeapService.Handlers.TrackEventParameters
+Innago.Shared.HeapService.Handlers.TrackEventParameters.AdditionalProperties.get -> System.Collections.Generic.Dictionary<string!, string!>?
+Innago.Shared.HeapService.Handlers.TrackEventParameters.AdditionalProperties.init -> void
+Innago.Shared.HeapService.Handlers.TrackEventParameters.EmailAddress.get -> string!
+Innago.Shared.HeapService.Handlers.TrackEventParameters.EmailAddress.init -> void
+Innago.Shared.HeapService.Handlers.TrackEventParameters.EventName.get -> string!
+Innago.Shared.HeapService.Handlers.TrackEventParameters.EventName.init -> void
+Innago.Shared.HeapService.Handlers.TrackEventParameters.Timestamp.get -> System.DateTimeOffset
+Innago.Shared.HeapService.Handlers.TrackEventParameters.Timestamp.init -> void
+Innago.Shared.HeapService.Handlers.TrackEventParameters.TrackEventParameters(string! EmailAddress, string! EventName, System.DateTimeOffset Timestamp, System.Collections.Generic.Dictionary<string!, string!>? AdditionalProperties) -> void
 Innago.Shared.HeapService.Payload<T>
 Innago.Shared.HeapService.Payload<T>.Error.get -> string?
 Innago.Shared.HeapService.Payload<T>.Error.init -> void
 Innago.Shared.HeapService.Payload<T>.Payload(T? Result = default(T?), string? Error = null) -> void
 Innago.Shared.HeapService.Payload<T>.Result.get -> T?
 Innago.Shared.HeapService.Payload<T>.Result.init -> void
+static Innago.Shared.HeapService.Handlers.Track.TrackEvent(Innago.Shared.HeapService.Handlers.TrackEventParameters! parameters, RestSharp.RestClient! client, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Microsoft.AspNetCore.Http.IResult!>!
