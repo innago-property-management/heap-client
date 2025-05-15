@@ -36,7 +36,7 @@ builder.Services.ConfigureServices(builder.Configuration, builder.Environment);
 
 WebApplication app = builder.Build();
 app.ConfigureApplicationBuilder();
-app.ConfigureRoutes(app.Configuration);
+app.ConfigureRoutes();
 
 await app.RunAsync();
 

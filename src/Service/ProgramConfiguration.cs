@@ -10,6 +10,8 @@ using Serilog;
 
 namespace Innago.Shared.HeapService;
 
+using RestSharp;
+
 internal static class ProgramConfiguration
 {
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
@@ -19,6 +21,13 @@ internal static class ProgramConfiguration
         services.AddSerilog();
         services.AddLogging();
         services.AddHealthChecks().ForwardToPrometheus();
+
+        services.AddKeyedScoped<RestClient>("heap", (_, _) => 
+        {
+            RestClientOptions options = new("https://heapanalytics.com/api/track");
+            RestClient client = new(options);
+            return client;
+        });
 
         void ConfigureTracing(TracerProviderBuilder providerBuilder)
         {
@@ -54,9 +63,10 @@ internal static class ProgramConfiguration
     {
         app.UseSerilogRequestLogging();
         app.UseHttpMetrics();
+        Registry.EnvironmentId = app.Configuration["heapEnvironmentId"] ?? throw new InvalidOperationException("missing env id");
     }
 
-    public static void ConfigureRoutes(this IEndpointRouteBuilder builder, IConfiguration configuration)
+    public static void ConfigureRoutes(this IEndpointRouteBuilder builder)
     {
         builder.MapOpenApi("/openapi.json").CacheOutput();
         builder.MapHealthChecks("/healthz/live", new HealthCheckOptions { Predicate = registration => registration.Tags.Contains("live") });
@@ -64,6 +74,8 @@ internal static class ProgramConfiguration
         builder.MapMetrics("/metricsz");
 
         builder.MapGet("/placeholder", Handler).WithDescription("placeholder").WithTags("test");
+
+        builder.MapPost("/track", Handlers.Track.TrackEvent).WithTags("heap");
     }
 
     private static Task<Payload<string>> Handler()
