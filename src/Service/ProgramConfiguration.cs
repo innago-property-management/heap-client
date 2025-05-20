@@ -17,9 +17,12 @@ internal static class ProgramConfiguration
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
         services.AddOpenApi();
+        
         services.AddOpenTelemetry().WithTracing(ConfigureTracing);
-        services.AddSerilog();
+        
         services.AddLogging();
+        services.AddSerilog();
+        
         services.AddHealthChecks().ForwardToPrometheus();
 
         services.AddKeyedScoped<RestClient>("heap", (_, _) => 
