@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Innago.Shared.HeapService;
 
-using Handlers;
+using Handlers.Track;
 
 [JsonSerializable(typeof(TrackEventParameters))]
 [JsonSerializable(typeof(Dictionary<string, string>))]

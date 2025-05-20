@@ -1,4 +1,4 @@
-namespace Innago.Shared.HeapService.Handlers;
+namespace Innago.Shared.HeapService.Handlers.Track;
 
 using System.Net;
 using System.Text.Json;
@@ -13,7 +13,7 @@ public static class Track
     /// <summary>
     /// Tracks an event for a specific user with associated properties using the configured Heap client.
     /// </summary>
-    /// <param name="parameters">An instance of <see cref="TrackEventParameters"/> containing the email address, event name, timestamp, and any additional properties for the event.</param>
+    /// <param name="parameters">An instance of <see cref="Innago.Shared.HeapService.Handlers.Track.TrackEventParameters"/> containing the email address, event name, timestamp, and any additional properties for the event.</param>
     /// <param name="client">The <see cref="RestClient"/> instance configured for connecting to Heap services.</param>
     /// <param name="cancellationToken">A token to observe while waiting for the operation to complete, allowing for cancellation.</param>
     /// <returns>An <see cref="IResult"/> indicating the result of the request. This may be an OK, BadRequest, or an empty result based on the response status.</returns>

@@ -1,4 +1,4 @@
-namespace Innago.Shared.HeapService.Handlers;
+namespace Innago.Shared.HeapService.Handlers.Track;
 
 /// <summary>
 /// Represents the parameters required to track an event in the system.

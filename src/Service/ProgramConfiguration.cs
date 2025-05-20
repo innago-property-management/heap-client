@@ -73,13 +73,6 @@ internal static class ProgramConfiguration
         builder.MapHealthChecks("/healthz/ready", new HealthCheckOptions { Predicate = registration => registration.Tags.Contains("ready") });
         builder.MapMetrics("/metricsz");
 
-        builder.MapGet("/placeholder", Handler).WithDescription("placeholder").WithTags("test");
-
-        builder.MapPost("/track", Handlers.Track.TrackEvent).WithTags("heap");
-    }
-
-    private static Task<Payload<string>> Handler()
-    {
-        return Task.FromResult(new Payload<string>("hello world"));
+        builder.MapPost("/track", Handlers.Track.Track.TrackEvent).WithTags("heap");
     }
 }
