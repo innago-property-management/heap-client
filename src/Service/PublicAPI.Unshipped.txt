@@ -1,6 +1,40 @@
+Innago.Shared.HeapService.Handlers.Track.Track
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.AdditionalProperties.get -> System.Collections.Generic.Dictionary<string!, string!>?
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.AdditionalProperties.init -> void
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.EmailAddress.get -> string!
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.EmailAddress.init -> void
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.EventName.get -> string!
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.EventName.init -> void
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Timestamp.get -> System.DateTimeOffset
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Timestamp.init -> void
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.TrackEventParameters(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters! original) -> void
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.TrackEventParameters(string! EmailAddress, string! EventName, System.DateTimeOffset Timestamp, System.Collections.Generic.Dictionary<string!, string!>? AdditionalProperties) -> void
 Innago.Shared.HeapService.Payload<T>
 Innago.Shared.HeapService.Payload<T>.Error.get -> string?
 Innago.Shared.HeapService.Payload<T>.Error.init -> void
 Innago.Shared.HeapService.Payload<T>.Payload(T? Result = default(T?), string? Error = null) -> void
 Innago.Shared.HeapService.Payload<T>.Result.get -> T?
 Innago.Shared.HeapService.Payload<T>.Result.init -> void
+static Innago.Shared.HeapService.Handlers.Track.Track.TrackEvent(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters! parameters, RestSharp.RestClient! client, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Microsoft.AspNetCore.Http.IResult!>!
+virtual Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.EqualityContract.get -> System.Type!
+override Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.ToString() -> string!
+virtual Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.PrintMembers(System.Text.StringBuilder! builder) -> bool
+static Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.operator !=(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters? left, Innago.Shared.HeapService.Handlers.Track.TrackEventParameters? right) -> bool
+virtual Innago.Shared.HeapService.Payload<T>.EqualityContract.get -> System.Type!
+override Innago.Shared.HeapService.Payload<T>.ToString() -> string!
+static Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.operator ==(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters? left, Innago.Shared.HeapService.Handlers.Track.TrackEventParameters? right) -> bool
+virtual Innago.Shared.HeapService.Payload<T>.PrintMembers(System.Text.StringBuilder! builder) -> bool
+static Innago.Shared.HeapService.Payload<T>.operator !=(Innago.Shared.HeapService.Payload<T>? left, Innago.Shared.HeapService.Payload<T>? right) -> bool
+static Innago.Shared.HeapService.Payload<T>.operator ==(Innago.Shared.HeapService.Payload<T>? left, Innago.Shared.HeapService.Payload<T>? right) -> bool
+override Innago.Shared.HeapService.Payload<T>.GetHashCode() -> int
+override Innago.Shared.HeapService.Payload<T>.Equals(object? obj) -> bool
+virtual Innago.Shared.HeapService.Payload<T>.Equals(Innago.Shared.HeapService.Payload<T>? other) -> bool
+virtual Innago.Shared.HeapService.Payload<T>.<Clone>$() -> Innago.Shared.HeapService.Payload<T>!
+Innago.Shared.HeapService.Payload<T>.Payload(Innago.Shared.HeapService.Payload<T>! original) -> void
+Innago.Shared.HeapService.Payload<T>.Deconstruct(out T? Result, out string? Error) -> void
+override Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Equals(object? obj) -> bool
+virtual Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Equals(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters? other) -> bool
+virtual Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.<Clone>$() -> Innago.Shared.HeapService.Handlers.Track.TrackEventParameters!
+Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Deconstruct(out string! EmailAddress, out string! EventName, out System.DateTimeOffset Timestamp, out System.Collections.Generic.Dictionary<string!, string!>? AdditionalProperties) -> void
+override Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.GetHashCode() -> int

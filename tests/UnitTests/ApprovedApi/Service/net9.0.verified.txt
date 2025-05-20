@@ -1,0 +1,27 @@
+﻿[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPart("Microsoft.AspNetCore.OpenApi")]
+[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPart("Prometheus.AspNetCore")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsId("aed57d7d-7507-4563-ae16-6b76899fd0dd")]
+namespace Innago.Shared.HeapService.Handlers.Track
+{
+    public static class Track
+    {
+        public static System.Threading.Tasks.Task<Microsoft.AspNetCore.Http.IResult> TrackEvent(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters parameters, [Microsoft.Extensions.DependencyInjection.FromKeyedServices("heap")] RestSharp.RestClient client, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class TrackEventParameters : System.IEquatable<Innago.Shared.HeapService.Handlers.Track.TrackEventParameters>
+    {
+        public TrackEventParameters(string EmailAddress, string EventName, System.DateTimeOffset Timestamp, System.Collections.Generic.Dictionary<string, string>? AdditionalProperties) { }
+        public System.Collections.Generic.Dictionary<string, string>? AdditionalProperties { get; init; }
+        public string EmailAddress { get; init; }
+        public string EventName { get; init; }
+        public System.DateTimeOffset Timestamp { get; init; }
+    }
+}
+namespace Innago.Shared.HeapService
+{
+    public class Payload<T> : System.IEquatable<Innago.Shared.HeapService.Payload<T>>
+    {
+        public Payload(T? Result = default, string? Error = null) { }
+        public string? Error { get; init; }
+        public T Result { get; init; }
+    }
+}

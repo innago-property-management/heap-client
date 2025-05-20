@@ -5,22 +5,24 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/placeholder": {
-      "get": {
+    "/track": {
+      "post": {
         "tags": [
-          "test"
+          "heap"
         ],
-        "description": "placeholder",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PayloadOfstring"
-                }
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrackEventParameters"
               }
             }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -28,17 +30,30 @@
   },
   "components": {
     "schemas": {
-      "PayloadOfstring": {
+      "TrackEventParameters": {
+        "required": [
+          "emailAddress",
+          "eventName",
+          "timestamp",
+          "additionalProperties"
+        ],
         "type": "object",
         "properties": {
-          "result": {
-            "type": "string",
-            "default": null,
-            "nullable": true
+          "emailAddress": {
+            "type": "string"
           },
-          "error": {
+          "eventName": {
+            "type": "string"
+          },
+          "timestamp": {
             "type": "string",
-            "default": null,
+            "format": "date-time"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
             "nullable": true
           }
         }
@@ -47,7 +62,7 @@
   },
   "tags": [
     {
-      "name": "test"
+      "name": "heap"
     }
   ]
 }
