@@ -5,7 +5,7 @@ namespace Innago.Shared.HeapService.Handlers.Track
 {
     public static class Track
     {
-        public static System.Threading.Tasks.Task<Microsoft.AspNetCore.Http.IResult> TrackEvent(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters parameters, [Microsoft.Extensions.DependencyInjection.FromKeyedServices("heap")] RestSharp.RestClient client, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task<Microsoft.AspNetCore.Http.IResult> TrackEvent(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters parameters, [Microsoft.Extensions.DependencyInjection.FromKeyedServices("heap")] RestSharp.RestClient client, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory, System.Threading.CancellationToken cancellationToken) { }
     }
     public class TrackEventParameters : System.IEquatable<Innago.Shared.HeapService.Handlers.Track.TrackEventParameters>
     {
