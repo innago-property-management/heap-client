@@ -20,8 +20,8 @@ internal static class ProgramConfiguration
         
         services.AddOpenTelemetry().WithTracing(ConfigureTracing);
         
-        services.AddLogging();
         services.AddSerilog();
+        services.AddLogging();
         
         services.AddHealthChecks().ForwardToPrometheus();
 
