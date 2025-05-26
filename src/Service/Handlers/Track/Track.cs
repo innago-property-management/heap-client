@@ -15,11 +15,13 @@ public static class Track
     /// </summary>
     /// <param name="parameters">An instance of <see cref="Innago.Shared.HeapService.Handlers.Track.TrackEventParameters"/> containing the email address, event name, timestamp, and any additional properties for the event.</param>
     /// <param name="client">The <see cref="RestClient"/> instance configured for connecting to Heap services.</param>
+    /// <param name="loggerFactory"></param>
     /// <param name="cancellationToken">A token to observe while waiting for the operation to complete, allowing for cancellation.</param>
     /// <returns>An <see cref="IResult"/> indicating the result of the request. This may be an OK, BadRequest, or an empty result based on the response status.</returns>
     public static async Task<IResult> TrackEvent(
         TrackEventParameters parameters,
         [FromKeyedServices("heap")] RestClient client,
+        ILoggerFactory loggerFactory,
         CancellationToken cancellationToken)
     {
         Dictionary<string, string> additionalProperties = parameters.AdditionalProperties ?? new Dictionary<string, string>();
@@ -27,14 +29,14 @@ public static class Track
         request.AddHeader("accept", "application/json");
 
         var jsonString = $$"""
-{
-    "app_id": "{{Registry.EnvironmentId}}",
-    "identity": "{{parameters.EmailAddress.ToLowerInvariant()}}",
-    "event": "{{parameters.EventName.ToLowerInvariant()}}",
-    "timestamp": "{{parameters.Timestamp:O}}",
-    "properties" : {{JsonSerializer.Serialize(additionalProperties, typeof(Dictionary<string, string>), AppJsonSerializerContext.Default)}}
-}
-""";
+                           {
+                               "app_id": "{{Registry.EnvironmentId}}",
+                               "identity": "{{parameters.EmailAddress.ToLowerInvariant()}}",
+                               "event": "{{parameters.EventName.ToLowerInvariant()}}",
+                               "timestamp": "{{parameters.Timestamp:O}}",
+                               "properties" : {{JsonSerializer.Serialize(additionalProperties, typeof(Dictionary<string, string>), AppJsonSerializerContext.Default)}}
+                           }
+                           """;
 
         request.AddJsonBody(jsonString, false);
 
@@ -46,6 +48,9 @@ public static class Track
             HttpStatusCode.BadRequest => TypedResults.BadRequest(),
             _ => TypedResults.Empty,
         };
+
+        ILogger logger = loggerFactory.CreateLogger(nameof(TrackEvent));
+        logger.LogHeapCall(jsonString, response.Content);
 
         return result;
     }
