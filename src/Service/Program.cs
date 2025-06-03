@@ -11,6 +11,7 @@ AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromSeco
 WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(args);
 
 LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
+    .SetLogLevelsFromConfig(builder.Configuration)
     .WriteTo.Console(new RenderedCompactJsonFormatter())
     .WriteTo.OpenTelemetry(options =>
     {
@@ -28,10 +29,7 @@ LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
     .Enrich.WithRequestHeader("X-Forwarded-For")
     .Enrich.WithRequestHeader("X-B3-TraceId")
     .Enrich.WithRequestHeader("X-B3-SpanId")
-    .Enrich.WithRequestHeader("X-B3-ParentSpanId")
-    .Enrich.WithRequestHeader("x-forwarded-for");
-
-loggerConfiguration.SetLogLevelsFromConfig(builder.Configuration);
+    .Enrich.WithRequestHeader("X-B3-ParentSpanId");
 
 Log.Logger = loggerConfiguration.CreateLogger();
 
@@ -41,10 +39,10 @@ builder.Services.ConfigureServices(builder.Configuration, builder.Environment);
 
 WebApplication app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseSerilogRequestLogging();
 app.ConfigureApplicationBuilder();
 app.ConfigureRoutes();
-app.UseForwardedHeaders();
 
 await app.RunAsync();
 

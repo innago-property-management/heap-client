@@ -91,7 +91,7 @@ internal static class ProgramConfiguration
         builder.MapPost("/track", Handlers.Track.Track.TrackEvent).WithTags("heap");
     }
 
-    internal static void SetLogLevelsFromConfig(this LoggerConfiguration loggerConfiguration, IConfiguration configuration)
+    internal static LoggerConfiguration SetLogLevelsFromConfig(this LoggerConfiguration loggerConfiguration, IConfiguration configuration)
     {
         IConfigurationSection minimumLevelSection = configuration.GetSection("Serilog:MinimumLevel");
 
@@ -103,6 +103,8 @@ internal static class ProgramConfiguration
         {
             loggerConfiguration.MinimumLevel.Override(overrideEntry.Key, overrideEntry.Value.ToLogEventLevel());
         }
+
+        return loggerConfiguration;
     }
 
     private static LogEventLevel ToLogEventLevel(this string? logLevel)
