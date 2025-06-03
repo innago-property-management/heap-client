@@ -10,28 +10,40 @@ using Serilog;
 
 namespace Innago.Shared.HeapService;
 
+using Microsoft.AspNetCore.HttpOverrides;
+
 using RestSharp;
+
+using Serilog.Events;
 
 internal static class ProgramConfiguration
 {
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
         services.AddOpenApi();
-        
+
         services.AddOpenTelemetry().WithTracing(ConfigureTracing);
-        
+
         services.AddSerilog();
-        services.AddLogging();
-        
+
         services.AddHealthChecks().ForwardToPrometheus();
 
-        services.AddKeyedScoped<RestClient>("heap", (_, _) => 
+        services.AddKeyedScoped<RestClient>("heap",
+            (_, _) =>
+            {
+                RestClientOptions options = new("https://heapanalytics.com/api/track");
+                RestClient client = new(options);
+                return client;
+            });
+
+        services.Configure<ForwardedHeadersOptions>(options =>
         {
-            RestClientOptions options = new("https://heapanalytics.com/api/track");
-            RestClient client = new(options);
-            return client;
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
         });
 
+        services.AddHttpContextAccessor();
+
+        // ReSharper disable once SeparateLocalFunctionsWithJumpStatement
         void ConfigureTracing(TracerProviderBuilder providerBuilder)
         {
             string serviceName = configuration["opentelemetry:serviceName"] ??
@@ -77,5 +89,24 @@ internal static class ProgramConfiguration
         builder.MapMetrics("/metricsz");
 
         builder.MapPost("/track", Handlers.Track.Track.TrackEvent).WithTags("heap");
+    }
+
+    internal static void SetLogLevelsFromConfig(this LoggerConfiguration loggerConfiguration, IConfiguration configuration)
+    {
+        IConfigurationSection minimumLevelSection = configuration.GetSection("Serilog:MinimumLevel");
+
+        loggerConfiguration.MinimumLevel.Is(minimumLevelSection["default"].ToLogEventLevel());
+
+        IConfigurationSection overrideSection = minimumLevelSection.GetSection("Override");
+
+        foreach (IConfigurationSection overrideEntry in overrideSection.GetChildren())
+        {
+            loggerConfiguration.MinimumLevel.Override(overrideEntry.Key, overrideEntry.Value.ToLogEventLevel());
+        }
+    }
+
+    private static LogEventLevel ToLogEventLevel(this string? logLevel)
+    {
+        return Enum.TryParse(logLevel, true, out LogEventLevel logEventLevel) ? logEventLevel : LogEventLevel.Error;
     }
 }
