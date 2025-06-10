@@ -12,10 +12,10 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.6" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.0">
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -23,7 +23,7 @@
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="Verify.DiffPlex" Version="3.1.2" />
-        <PackageReference Include="Verify.Xunit" Version="30.3.0" />
+        <PackageReference Include="Verify.Xunit" Version="30.3.1" />
         <PackageReference Include="Xunit.OpenCategories" Version="2.2.0.10" />
     </ItemGroup>
 
@@ -37,6 +37,7 @@
 
     <ItemGroup>
         <Folder Include="ApprovedApi\" />
+        <Folder Include="ApprovedApi\Service\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -71,6 +71,8 @@ internal static class ProgramConfiguration
                 options.Endpoint = uri!;
                 options.Protocol = OtlpExportProtocol.HttpProtobuf;
             });
+
+            services.AddTransient(_ => TracerProvider.Default.GetTracer(serviceName));
         }
     }
 

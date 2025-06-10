@@ -3,6 +3,8 @@ namespace Innago.Shared.HeapService.Handlers.Track;
 using System.Net;
 using System.Text.Json;
 
+using OpenTelemetry.Trace;
+
 using RestSharp;
 
 /// <summary>
@@ -16,14 +18,18 @@ public static class Track
     /// <param name="parameters">An instance of <see cref="Innago.Shared.HeapService.Handlers.Track.TrackEventParameters"/> containing the email address, event name, timestamp, and any additional properties for the event.</param>
     /// <param name="client">The <see cref="RestClient"/> instance configured for connecting to Heap services.</param>
     /// <param name="loggerFactory"></param>
+    /// <param name="tracer">The open telemetry tracer.</param>
     /// <param name="cancellationToken">A token to observe while waiting for the operation to complete, allowing for cancellation.</param>
     /// <returns>An <see cref="IResult"/> indicating the result of the request. This may be an OK, BadRequest, or an empty result based on the response status.</returns>
     public static async Task<IResult> TrackEvent(
         TrackEventParameters parameters,
         [FromKeyedServices("heap")] RestClient client,
         ILoggerFactory loggerFactory,
+        Tracer tracer,
         CancellationToken cancellationToken)
     {
+        using TelemetrySpan span = tracer.StartSpan(nameof(TrackEvent));
+        
         Dictionary<string, string> additionalProperties = parameters.AdditionalProperties ?? new Dictionary<string, string>();
         RestRequest request = new(string.Empty);
         request.AddHeader("accept", "application/json");
@@ -40,6 +46,8 @@ public static class Track
 
         request.AddJsonBody(jsonString, false);
 
+        span.SetAttribute("identity", parameters.EmailAddress.ToLowerInvariant());
+
         RestResponse response = await client.PostAsync(request, cancellationToken).ConfigureAwait(false);
 
         IResult result = response.StatusCode switch
@@ -51,6 +59,8 @@ public static class Track
 
         ILogger logger = loggerFactory.CreateLogger(nameof(TrackEvent));
         logger.LogHeapCall(jsonString, response.Content);
+        
+        span.SetStatus(response.StatusCode == HttpStatusCode.OK ? Status.Ok : Status.Error);
 
         return result;
     }

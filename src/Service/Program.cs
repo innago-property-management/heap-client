@@ -15,7 +15,8 @@ LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
     .WriteTo.Console(new RenderedCompactJsonFormatter())
     .WriteTo.OpenTelemetry(options =>
     {
-        options.Endpoint = "http://opentelemetry-collector.observability.svc/v1/logs";
+        string authority = new Uri(builder.Configuration["openTelemetry:endpoint"] ?? throw new InvalidOperationException()).GetLeftPart(UriPartial.Authority);
+        options.Endpoint = $"{authority}/v1/logs";
         options.Protocol = OtlpProtocol.HttpProtobuf;
     })
     .Enrich.FromLogContext()
