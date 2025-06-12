@@ -2,6 +2,14 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Innago.Shared.HeapService | v1",
+    "contact": {
+      "name": "Support Team",
+      "email": "support@innago.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
     "version": "1.0.0"
   },
   "paths": {
@@ -10,6 +18,8 @@
         "tags": [
           "heap"
         ],
+        "summary": "Forwards event to heap analytics service",
+        "description": "Tracks an event for a specific user with associated properties using the configured Heap client.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -58,8 +68,22 @@
           }
         }
       }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "openIdConnect",
+        "description": "Enter your JWT token in the format 'Bearer {token}' to access this API.",
+        "openIdConnectUrl": "https://my-api.innago.com/connect/token"
+      }
     }
   },
+  "security": [
+    {
+      "BearerAuth": [
+        "heap"
+      ]
+    }
+  ],
   "tags": [
     {
       "name": "heap"
