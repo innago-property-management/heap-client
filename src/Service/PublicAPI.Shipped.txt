@@ -38,4 +38,3 @@ virtual Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Equals(Inn
 virtual Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.<Clone>$() -> Innago.Shared.HeapService.Handlers.Track.TrackEventParameters!
 Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.Deconstruct(out string! EmailAddress, out string! EventName, out System.DateTimeOffset Timestamp, out System.Collections.Generic.Dictionary<string!, string!>? AdditionalProperties) -> void
 override Innago.Shared.HeapService.Handlers.Track.TrackEventParameters.GetHashCode() -> int
-static Innago.Shared.HeapService.Handlers.Track.Track.TrackEvent(Innago.Shared.HeapService.Handlers.Track.TrackEventParameters! parameters, RestSharp.RestClient! client, Microsoft.Extensions.Logging.ILoggerFactory! loggerFactory, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Microsoft.AspNetCore.Http.IResult!>!

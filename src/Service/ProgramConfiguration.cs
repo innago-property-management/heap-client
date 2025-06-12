@@ -1,4 +1,13 @@
+namespace Innago.Shared.HeapService;
+
+using System.Diagnostics.CodeAnalysis;
+
+using Handlers.Track;
+
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi.Models;
 
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
@@ -6,21 +15,38 @@ using OpenTelemetry.Trace;
 
 using Prometheus;
 
-using Serilog;
-
-namespace Innago.Shared.HeapService;
-
-using Microsoft.AspNetCore.HttpOverrides;
-
 using RestSharp;
 
+using Serilog;
 using Serilog.Events;
 
+[SuppressMessage("Minor Code Smell", "S1075:URIs should not be hardcoded")]
 internal static class ProgramConfiguration
 {
+    public static void ConfigureApplicationBuilder(this WebApplication app)
+    {
+        app.UseSerilogRequestLogging();
+        app.UseHttpMetrics();
+        Registry.EnvironmentId = app.Configuration["heapEnvironmentId"] ?? throw new InvalidOperationException("missing env id");
+    }
+
+    public static void ConfigureRoutes(this IEndpointRouteBuilder builder)
+    {
+        builder.MapOpenApi("/openapi.json").CacheOutput();
+        builder.MapHealthChecks("/healthz/live", new HealthCheckOptions { Predicate = registration => registration.Tags.Contains("live") });
+        builder.MapHealthChecks("/healthz/ready", new HealthCheckOptions { Predicate = registration => registration.Tags.Contains("ready") });
+        builder.MapMetrics("/metricsz");
+
+        builder.MapPost("/track", Track.TrackEvent)
+            .WithTags("heap")
+            .WithDisplayName("Track Heap Event")
+            .WithDescription("Tracks an event for a specific user with associated properties using the configured Heap client.")
+            .WithSummary("Forwards event to heap analytics service");
+    }
+
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
-        services.AddOpenApi();
+        services.AddOpenApi(ConfigureOpenApiDocument);
 
         services.AddOpenTelemetry().WithTracing(ConfigureTracing);
 
@@ -76,23 +102,6 @@ internal static class ProgramConfiguration
         }
     }
 
-    public static void ConfigureApplicationBuilder(this WebApplication app)
-    {
-        app.UseSerilogRequestLogging();
-        app.UseHttpMetrics();
-        Registry.EnvironmentId = app.Configuration["heapEnvironmentId"] ?? throw new InvalidOperationException("missing env id");
-    }
-
-    public static void ConfigureRoutes(this IEndpointRouteBuilder builder)
-    {
-        builder.MapOpenApi("/openapi.json").CacheOutput();
-        builder.MapHealthChecks("/healthz/live", new HealthCheckOptions { Predicate = registration => registration.Tags.Contains("live") });
-        builder.MapHealthChecks("/healthz/ready", new HealthCheckOptions { Predicate = registration => registration.Tags.Contains("ready") });
-        builder.MapMetrics("/metricsz");
-
-        builder.MapPost("/track", Handlers.Track.Track.TrackEvent).WithTags("heap");
-    }
-
     internal static LoggerConfiguration SetLogLevelsFromConfig(this LoggerConfiguration loggerConfiguration, IConfiguration configuration)
     {
         IConfigurationSection minimumLevelSection = configuration.GetSection("Serilog:MinimumLevel");
@@ -107,6 +116,78 @@ internal static class ProgramConfiguration
         }
 
         return loggerConfiguration;
+    }
+
+    private static OpenApiSecurityRequirement AddBearerAuthSecurityRequirement()
+    {
+        return new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "BearerAuth",
+                    },
+                },
+                ["heap"]
+            },
+        };
+    }
+
+    private static OpenApiContact ConfigureApiContactInfo()
+    {
+        return new OpenApiContact
+        {
+            Name = "Support Team",
+            Email = "support@innago.com",
+        };
+    }
+
+    private static void ConfigureOpenApiDocument(OpenApiOptions options)
+    {
+        options.AddDocumentTransformer((document, _, _) =>
+        {
+            document.Info.Contact = ConfigureApiContactInfo();
+            document.Info.License = ConfigureOpenApiLicense();
+
+            document.Components ??= new OpenApiComponents();
+            document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
+            document.Components.SecuritySchemes.Add("BearerAuth", CreateBearerAuthSecurityScheme());
+
+            document.SecurityRequirements.Add(AddBearerAuthSecurityRequirement());
+
+            return Task.CompletedTask;
+        });
+    }
+
+    private static OpenApiLicense ConfigureOpenApiLicense()
+    {
+        return new OpenApiLicense
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT"),
+        };
+    }
+
+    private static OpenApiSecurityScheme CreateBearerAuthSecurityScheme()
+    {
+        return new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OpenIdConnect,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "Enter your JWT token in the format 'Bearer {token}' to access this API.",
+            OpenIdConnectUrl = new Uri("https://my-api.innago.com/connect/token"),
+            Flows = new OpenApiOAuthFlows
+            {
+                ClientCredentials = new OpenApiOAuthFlow(),
+            },
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            UnresolvedReference = true,
+        };
     }
 
     private static LogEventLevel ToLogEventLevel(this string? logLevel)
