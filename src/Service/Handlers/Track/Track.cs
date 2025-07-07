@@ -64,7 +64,7 @@ public static class Track
         
         span.SetStatus(response.StatusCode == HttpStatusCode.OK ? Status.Ok : Status.Error);
 
-        MyMetrics.MyCounter.WithLabels("test").Inc();
+        MyMetrics.MyCounter.WithLabels("test2").Inc();
         
         return result;
     }
