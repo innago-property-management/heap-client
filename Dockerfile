@@ -5,7 +5,7 @@ WORKDIR /src
 
 #RUN apt-get update && apt install gcc --yes
 
-COPY src .
+#COPY src .
 
 WORKDIR /src
 
@@ -13,7 +13,11 @@ ARG TARGETPLATFORM
 ARG BUILDPLATFORM
 #RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM and $TARGETARCH" > /log
 
+COPY src/Service/Service.csproj Service/
+
 RUN dotnet restore Service/Service.csproj --arch $TARGETARCH
+
+COPY src/Service ./Service
 
 RUN dotnet publish Service/Service.csproj \
     --no-restore \

@@ -36,6 +36,38 @@
           }
         }
       }
+    },
+    "/track2": {
+      "post": {
+        "tags": [
+          "Track"
+        ],
+        "parameters": [
+          {
+            "name": "x-test",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "default": null
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrackEventParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -87,6 +119,9 @@
   "tags": [
     {
       "name": "heap"
+    },
+    {
+      "name": "Track"
     }
   ]
 }

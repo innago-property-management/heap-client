@@ -42,6 +42,8 @@ internal static class ProgramConfiguration
             .WithDisplayName("Track Heap Event")
             .WithDescription("Tracks an event for a specific user with associated properties using the configured Heap client.")
             .WithSummary("Forwards event to heap analytics service");
+
+        builder.MapPost("/track2", Track.TrackEvent2);
     }
 
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
