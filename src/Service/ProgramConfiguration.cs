@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Handlers.Track;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -68,6 +69,8 @@ internal static class ProgramConfiguration
         {
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
         });
+
+        services.ConfigureOptions<JsonOptionsSetup>();
 
         services.AddHttpContextAccessor();
 
