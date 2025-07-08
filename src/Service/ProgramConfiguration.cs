@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Handlers.Track;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -42,6 +43,8 @@ internal static class ProgramConfiguration
             .WithDisplayName("Track Heap Event")
             .WithDescription("Tracks an event for a specific user with associated properties using the configured Heap client.")
             .WithSummary("Forwards event to heap analytics service");
+
+        builder.MapPost("/track2", Track.TrackEvent2);
     }
 
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
@@ -66,6 +69,8 @@ internal static class ProgramConfiguration
         {
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
         });
+
+        services.ConfigureOptions<JsonOptionsSetup>();
 
         services.AddHttpContextAccessor();
 

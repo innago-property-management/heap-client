@@ -3,6 +3,8 @@ namespace Innago.Shared.HeapService.Handlers.Track;
 using System.Net;
 using System.Text.Json;
 
+using Microsoft.AspNetCore.Mvc;
+
 using OpenTelemetry.Trace;
 
 using RestSharp;
@@ -62,6 +64,22 @@ public static class Track
         
         span.SetStatus(response.StatusCode == HttpStatusCode.OK ? Status.Ok : Status.Error);
 
+        MyMetrics.MyCounter.WithLabels("test").Inc();
+        
         return result;
+    }
+
+    internal static Task<IResult> TrackEvent2(
+        TrackEventParameters parameters,
+        [FromKeyedServices("heap")] RestClient client,
+        ILoggerFactory loggerFactory,
+        Tracer tracer,
+        [FromHeader(Name = "x-test")] string? testHeaderValue = null,
+        CancellationToken cancellationToken = default)
+    {
+        ILogger l = loggerFactory.CreateLogger("test");
+        l.LogDebug("{Message}", testHeaderValue);
+
+        return TrackEvent(parameters, client, loggerFactory, tracer, cancellationToken);
     }
 }
