@@ -1,0 +1,59 @@
+name: promote-prod
+
+# Promotion is a GitOps merge: this writes the production image tag in
+# argocd-shared and ArgoCD reconciles it. Nothing is pushed to a cluster here.
+#
+# trainVersion names the GitHub milestone this promotion belongs to. Milestones
+# are already the release train -- one title spans several service repos -- and
+# passing it here is what stamps train_version onto the deployment record in
+# innago-engineering-metrics. Left blank, the promotion still happens and is
+# recorded as a promotion outside a train.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to promote. Leave blank to promote whatever is in stage."
+        required: false
+        type: string
+        default: ''
+      trainVersion:
+        description: "Milestone title naming the release train, e.g. 20.4.3. Must match a milestone in this repository."
+        required: false
+        type: string
+        default: ''
+      reason:
+        description: "Why this is going out"
+        required: true
+        type: choice
+        options:
+          - planned
+          - rollback
+          - hotfix
+        default: planned
+      dryRun:
+        description: "Validate and show the diff without pushing"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    uses: innago-property-management/Oui-DELIVER/.github/workflows/promote-prod.yml@main
+    permissions:
+      contents: read
+    with:
+      # The helm-values folder in argocd-shared, which is the catalog service
+      # name and is not always this repository's name.
+      folderName: heap-client
+      version: ${{ inputs.version }}
+      trainVersion: ${{ inputs.trainVersion }}
+      reason: ${{ inputs.reason }}
+      dryRun: ${{ inputs.dryRun }}
+      # heap-client's prod values file carries a migrationJob.image.tag.
+      updateMigrationTag: true
+    secrets:
+      githubToken: ${{ secrets.ORG_NUGET_PUSH }}
